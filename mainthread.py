@@ -31,12 +31,9 @@ if __name__ == "__main__":
     
     pipeline = Pipeline()
     
-    exec_producer = threading.Thread(target=producer, args=(pipeline,))
-    exec_consumer = threading.Thread(target=consumer, args=(pipeline,))    
-    executor.start()
-    executor.start()
-    
-    executor.join()
+    with concurrent.futures.ThreadPoolExecutor(max_workers=2) as executor:
+        executor.submit(producer, pipeline)
+        executor.submit(consumer, pipeline)
     
     
     
